@@ -31,12 +31,12 @@ public class Message {
                        
                         String re2 = "mess\":\"";
                         int pos3 = s.indexOf(re2);
-                        int pos4 = s.indexOf("\"",pos3+re2.length());
+                        int pos4 = s.indexOf("\"}",pos3+re2.length());// Rajout de } parce que la personne qui a fait ça est très conne
                        
                         String s1 = s.substring(pos1+re1.length(), pos2);
                         String s2 = s.substring(pos3+re2.length(), pos4);
-                       
-                       
+
+
                         System.out.println("fromJson "+s1+" "+s2);
                         return new Message(s1, s2);
                        
