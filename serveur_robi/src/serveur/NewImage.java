@@ -9,6 +9,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Paths;
 
 class NewImage implements Command {
 
@@ -16,7 +17,7 @@ class NewImage implements Command {
 		public Reference run(Environment environment, Reference receiver, SNode method) {
 			try{
 				@SuppressWarnings("unchecked")
-				GElement e = ((Class<GImage>) receiver.receiver).getDeclaredConstructor(Image.class).newInstance(ImageIO.read(new File(".." + File.separator + method.get(2).contents())));
+				GElement e = ((Class<GImage>) receiver.receiver).getDeclaredConstructor(Image.class).newInstance(ImageIO.read(new File(Paths.get(".." + File.separator + method.get(2).contents()).toString())));
 				Reference ref = new Reference(e);
 				ref.addCommand("translate", new Translate());
 				return ref;
