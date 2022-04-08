@@ -6,7 +6,7 @@ import stree.parser.SNode;
 
 import java.lang.reflect.InvocationTargetException;
 
-class NewString extends Thread implements Command {
+class NewString implements Command {
 
 	@Override
 	public Reference run(Environment environment, Reference receiver, SNode method) {

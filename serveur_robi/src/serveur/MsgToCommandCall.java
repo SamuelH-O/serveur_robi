@@ -2,6 +2,7 @@ package serveur;
 
 import stree.parser.SNode;
 import stree.parser.SParser;
+import stree.parser.SPrinter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +12,7 @@ class MsgToCommandCall extends Thread {
 	PrintWriter writer;
 	Message command;
 	Environment environment;
+	boolean exit = false;
 
 	MsgToCommandCall(Environment environment, PrintWriter writer, Message command) {
 		this.writer = writer;
@@ -37,23 +39,37 @@ class MsgToCommandCall extends Thread {
 			// execution des s-expressions compilées
 			assert compiled != null;
 			StringBuilder traceMsgBuilder = new StringBuilder();
-			traceMsgBuilder.append(command.getMess()).append(" ");
 			String s;
+			SPrinter printer = new SPrinter();
 			for (SNode sNode : compiled) {
 				Interpreter i = new Interpreter();
 				s = i.compute(environment, sNode);
+				sNode.accept(printer);
+				traceMsgBuilder.append(printer.result().toString()).append("\n");
+				printer = new SPrinter();
 				if (s != null) {
-					traceMsgBuilder.append("Erreur : ").append(s);
+					traceMsgBuilder.append(s);
+				}
+				if (exit) {
+					Message traceMsg = new Message("trace", traceMsgBuilder.toString());
+					writer.println(Message.toJson(traceMsg));
+					return;
 				}
 			}
 			Message traceMsg = new Message("trace", traceMsgBuilder.toString());
-			System.out.print("msg trace envoyé : " + traceMsg.getMess());
+			System.out.println("msg trace envoyé : " + Message.toJson(traceMsg));
 			writer.println(Message.toJson(traceMsg));
 
 			long endTimeCommand = System.currentTimeMillis();
-			writer.println(Message.toJson(new Message("commandDone", "La commande à pris " + (endTimeCommand - startTimeCommand) + " ms")));
+			Message commandDone = new Message("commandDone", "La commande à pris " + (endTimeCommand - startTimeCommand) + " ms" + "\n");
+			writer.println(Message.toJson(commandDone));
+			System.out.println("msg commandDone envoyé : " + Message.toJson(commandDone));
 		} else {
 			writer.println(Message.toJson(new Message("commandDone", "Erreur type de message pas reconnu")));
 		}
+	}
+
+	public void stopAtNextCommand() {
+		this.exit = true;
 	}
 }

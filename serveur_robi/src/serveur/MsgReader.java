@@ -1,5 +1,7 @@
 package serveur;
 
+import tools.Tools;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,20 +21,25 @@ class MsgReader extends Thread {
 		public void run() {
 			String line;
 			StringBuilder commandStringBuilder = new StringBuilder();
+			MsgToCommandCall msgToCommandCallThread = null;
 			try {
+				System.out.println("Before while");
 				while ((line = reader.readLine()) != null) {
-					System.out.print(line);
+					System.out.println("After while");
 					if (line.endsWith("}")) {
 						commandStringBuilder.append(line);
-						System.out.println("\n" + commandStringBuilder);
 						Message command = Message.fromJson(commandStringBuilder.toString());
 						if (command.getType().equals("stopCommand")) {
-							// Is a MsgToCommandCall thread running
+							assert msgToCommandCallThread != null;
+							if (msgToCommandCallThread.isAlive()) {
+								msgToCommandCallThread.interrupt();
+								msgToCommandCallThread.stopAtNextCommand();
+							}
+							Tools.sleep(500);
 							writer.println(Message.toJson(new Message("commandDone", "La command à été arrêtée")));
 						} else {
-							System.out.println(command.getMess());
-							MsgToCommandCall MsgToCommandCallThread = new MsgToCommandCall(environment, writer, command);
-							MsgToCommandCallThread.start();
+							msgToCommandCallThread = new MsgToCommandCall(environment, writer, command);
+							msgToCommandCallThread.start();
 						}
 						commandStringBuilder = new StringBuilder();
 					} else {

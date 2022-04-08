@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-class NewImage extends Thread implements Command {
+class NewImage implements Command {
 
 		@Override
 		public Reference run(Environment environment, Reference receiver, SNode method) {

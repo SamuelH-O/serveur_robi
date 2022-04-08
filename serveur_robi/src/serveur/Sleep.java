@@ -3,7 +3,7 @@ package serveur;
 import stree.parser.SNode;
 import tools.Tools;
 
-class Sleep extends Thread implements Command {
+class Sleep implements Command {
 
 	@Override
 	public Reference run(Environment environment, Reference receiver, SNode method) {

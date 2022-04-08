@@ -5,11 +5,15 @@ import stree.parser.SNode;
 
 import java.awt.*;
 
-class SetDim extends Thread implements Command {
+class SetDim implements Command {
 
 	@Override
 	public Reference run(Environment environment, Reference receiver, SNode method) {
-		((GBounded) receiver.receiver).setDimension(new Dimension(Integer.parseInt(method.get(2).contents()), Integer.parseInt(method.get(3).contents())));
+		try {
+			((GBounded) receiver.receiver).setDimension(new Dimension(Integer.parseInt(method.get(2).contents()), Integer.parseInt(method.get(3).contents())));
+		} catch (NumberFormatException e) {
+			return null;
+		}
 		return receiver;
 	}
 }

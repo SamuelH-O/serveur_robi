@@ -4,7 +4,7 @@ import graphicLayer.GElement;
 import graphicLayer.GSpace;
 import stree.parser.SNode;
 
-class AddElement extends Thread implements Command {
+class AddElement implements Command {
 
 	@Override
 	public Reference run(Environment environment, Reference receiver, SNode method) {

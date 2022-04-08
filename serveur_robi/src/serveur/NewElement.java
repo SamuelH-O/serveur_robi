@@ -5,7 +5,7 @@ import stree.parser.SNode;
 
 import java.lang.reflect.InvocationTargetException;
 
-class NewElement extends Thread implements Command {
+class NewElement implements Command {
 
 	public Reference run(Environment environment, Reference receiver, SNode method) {
 		try {

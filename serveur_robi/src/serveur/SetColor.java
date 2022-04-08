@@ -8,12 +8,15 @@ import tools.Tools;
 class SetColor implements Command {
 
 	@Override
-	public Reference run(Environment environment, Reference receiver, SNode method) {
-		if (method.get(0).contents().equals("space")) {
-			((GSpace) receiver.receiver).setColor(Tools.getColorByName(method.get(2).contents()));
-		} else {
-			((GElement) receiver.receiver).setColor(Tools.getColorByName(method.get(2).contents()));
+	public Reference run(Environment environment, Reference ref, SNode method) {
+		if (Tools.getColorByName(method.get(2).contents()) == null) {
+			return null;
 		}
-		return receiver;
+		if (method.get(0).contents().equals("space")) {
+			((GSpace) ref.getReceiver()).setColor(Tools.getColorByName(method.get(2).contents()));
+		} else {
+			((GElement) ref.getReceiver()).setColor(Tools.getColorByName(method.get(2).contents()));
+		}
+		return ref;
 	}
 }
