@@ -16,7 +16,7 @@ class NewImage implements Command {
 		public Reference run(Environment environment, Reference receiver, SNode method) {
 			try{
 				@SuppressWarnings("unchecked")
-				GElement e = ((Class<GImage>) receiver.receiver).getDeclaredConstructor(Image.class).newInstance(ImageIO.read(new File("..\\" + method.get(2).contents())));
+				GElement e = ((Class<GImage>) receiver.receiver).getDeclaredConstructor(Image.class).newInstance(ImageIO.read(new File(".." + File.separator + method.get(2).contents())));
 				Reference ref = new Reference(e);
 				ref.addCommand("translate", new Translate());
 				return ref;
