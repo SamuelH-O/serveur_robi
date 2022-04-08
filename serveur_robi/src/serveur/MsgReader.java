@@ -23,9 +23,7 @@ class MsgReader extends Thread {
 			StringBuilder commandStringBuilder = new StringBuilder();
 			MsgToCommandCall msgToCommandCallThread = null;
 			try {
-				System.out.println("Before while");
 				while ((line = reader.readLine()) != null) {
-					System.out.println("After while");
 					if (line.endsWith("}")) {
 						commandStringBuilder.append(line);
 						Message command = Message.fromJson(commandStringBuilder.toString());
